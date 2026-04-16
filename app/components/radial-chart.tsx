@@ -21,23 +21,21 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart"
 
-export const description = "A radial chart with text"
-
-const chartData = [
-  { browser: "safari", visitors: 75, fill: "var(--color-safari)" },
-]
-
 const chartConfig = {
-  visitors: {
-    label: "Visitors",
+  score: {
+    label: "Score",
   },
-  safari: {
-    label: "Safari",
+  value: {
+    label: "Value",
     color: "#00E475",
   },
 } satisfies ChartConfig
 
-export function ChartRadialText() {
+export function ChartRadialText({ score = 0, description, issue }: { score?: number; description?: string; issue?: { title: string } }) {
+  const chartData = [
+    { name: "score", value: score, fill: "var(--color-value)", description: description, issue: issue },
+  ]
+  const endAngle = (score / 100) * 360
   return (
     <Card className="flex flex-col bg-[#1C2026] size-120">
       <CardHeader className="items-center pb-0 pt-5 text-center">
@@ -51,7 +49,7 @@ export function ChartRadialText() {
           <RadialBarChart
             data={chartData}
             startAngle={0}
-            endAngle={250}
+            endAngle={endAngle}
             outerRadius={90}
             innerRadius={80}
           >
@@ -62,7 +60,7 @@ export function ChartRadialText() {
               className="first:fill-muted last:fill-background"
               polarRadius={[90, 80]}
             />
-            <RadialBar dataKey="visitors" background cornerRadius={10} />
+            <RadialBar dataKey="value" background cornerRadius={10} />
             <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
               <Label
                 content={({ viewBox }) => {
@@ -79,7 +77,7 @@ export function ChartRadialText() {
                           y={viewBox.cy}
                           className="fill-foreground text-4xl font-bold"
                         >
-                          {chartData[0].visitors.toLocaleString()}
+                          {score}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
@@ -99,11 +97,13 @@ export function ChartRadialText() {
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 leading-none font-medium text-[#00E475]">
-        Optimization suggested <TrendingUp className="h-4 w-4" />
+        {description} <TrendingUp className="h-4 w-4" />
         </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
-        </div>
+        {issue?.title && (
+          <div className="leading-none text-muted-foreground">
+            {issue.title}
+          </div>
+        )}
       </CardFooter>
     </Card>
   )

@@ -1,6 +1,7 @@
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
@@ -13,6 +14,7 @@ import {
   HistoryIcon,
   SlidersHorizontalIcon,
   BookOpenIcon,
+  LogOut,
 } from "lucide-react";
 
 const navItems = [
@@ -20,8 +22,13 @@ const navItems = [
   { label: "Results", icon: ListChecksIcon },
   { label: "History", icon: HistoryIcon },
   { label: "Rules", icon: SlidersHorizontalIcon },
-  { label: "Documentation", icon: BookOpenIcon },
+  
 ];
+
+const navItems2 = [
+ { label: "Documentation", icon: BookOpenIcon },
+ { label: "Logout", icon: LogOut },
+]
 
 export function AppSidebar() {
   return (
@@ -29,7 +36,9 @@ export function AppSidebar() {
       <SidebarContent className="bg-[#181C22]">
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu className="m-2 gap-4">
+
+            <SidebarMenu className="m-2 gap-6">
+
               <div className="flex items-center gap-2">
                 <span className="size-2 rounded-full bg-green-500" />
                 <div className="flex flex-col leading-tight group-data-[collapsible=icon]:hidden">
@@ -39,9 +48,10 @@ export function AppSidebar() {
                   <span className="text-xs text-gray-500">ANALYSIS ACTIVE</span>
                 </div>
               </div>
+
               {navItems.map((item) => (
                 <SidebarMenuItem className="text-[#94A3B8]" key={item.label}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton asChild className="text-[16px] font-medium hover:bg-[#1C2026] rounded-none hover:h-10 hover:text-[#9ECAFF] hover:border-l-4 hover:border-l-[#00E475] [&:hover_svg]:text-[#9ECAFF]">
                     <button>
                       <item.icon className="size-4 text-[#94A3B8]" />
                       <span>{item.label}</span>
@@ -49,10 +59,26 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+
             </SidebarMenu>
+
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter className="bg-[#181C22]">
+        <SidebarMenu className="m-2 gap-6">
+          {navItems2.map((item) => (
+            <SidebarMenuItem className="text-[#94A3B8]" key={item.label}>
+              <SidebarMenuButton asChild className="text-[16px] font-medium hover:bg-[#1C2026] rounded-none hover:h-10 hover:text-[#9ECAFF] hover:border-l-4 hover:border-l-[#00E475] [&:hover_svg]:text-[#9ECAFF]">
+                <button>
+                  <item.icon className="size-4 text-[#94A3B8]" />
+                  <span>{item.label}</span>
+                </button>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }
