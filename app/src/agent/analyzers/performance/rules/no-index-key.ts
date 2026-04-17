@@ -21,7 +21,9 @@ export function noIndexKeyRule(ast: any): Issue[] {
             severity: 'medium',
             category: 'performance',
             line: path.node.loc?.start.line,
-            suggestion: 'Use um identificador único como key.',
+            suggestion: 'Use um identificador único (ex: item.id) como key em vez do index do array.',
+            explanation: 'Quando itens são reordenados, adicionados ou removidos, o React usa a key para identificar cada elemento. Com index, o React pode reutilizar o DOM errado, causando bugs visuais e perda de estado.',
+            benefit: 'Keys únicas permitem ao React rastrear cada item corretamente, evitando bugs de estado e melhorando a reconciliação do virtual DOM.',
           });
         }
       }

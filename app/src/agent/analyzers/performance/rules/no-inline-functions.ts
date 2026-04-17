@@ -21,7 +21,9 @@ export function noInlineFunctionsRule(ast: any): Issue[] {
           severity: 'medium',
           category: 'performance',
           line: path.node.loc?.start.line,
-          suggestion: 'Extraia a função para fora do JSX ou use useCallback.',
+          suggestion: 'Extraia a função para uma variável fora do return ou use useCallback para estabilizar a referência.',
+          explanation: 'Arrow functions declaradas diretamente em props JSX geram uma nova referência a cada render. Isso quebra a otimização do React.memo e causa re-renders desnecessários em componentes filhos.',
+          benefit: 'Referências estáveis evitam re-renders de componentes filhos otimizados com memo, melhorando a performance geral.',
         });
       }
     },

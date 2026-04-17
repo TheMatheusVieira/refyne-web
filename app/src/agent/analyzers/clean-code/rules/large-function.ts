@@ -17,7 +17,9 @@ export function largeFunctionRule(ast: any): Issue[] {
           severity: 'medium',
           category: 'clean-code',
           line: path.node.loc?.start.line,
-          suggestion: 'Divida em funções menores.',
+          suggestion: 'Divida em funções menores com responsabilidades únicas.',
+          explanation: 'Funções longas são difíceis de entender, testar e manter. Aumentam a chance de bugs e dificultam code reviews.',
+          benefit: 'Funções menores são mais legíveis, reutilizáveis e fáceis de testar unitariamente.',
         });
       }
     },

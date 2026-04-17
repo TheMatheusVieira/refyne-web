@@ -17,7 +17,9 @@ export function badNamingRule(ast: any): Issue[] {
           severity: 'low',
           category: 'clean-code',
           line: path.node.loc?.start.line,
-          suggestion: 'Use nomes mais claros e significativos.',
+          suggestion: 'Use nomes mais claros e significativos que revelem a intenção da variável.',
+          explanation: 'Nomes de uma letra não comunicam o propósito da variável. Outros devs (e você no futuro) precisarão adivinhar o que ela representa.',
+          benefit: 'Código auto-documentado reduz a necessidade de comentários e diminui o tempo de onboarding de novos devs.',
         });
       }
     },

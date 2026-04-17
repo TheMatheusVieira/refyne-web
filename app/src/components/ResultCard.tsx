@@ -1,54 +1,155 @@
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { AlertCircle, ChevronRight } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
+  AlertCircle,
+  ChevronRight,
+  Lightbulb,
+  ShieldAlert,
+  Sparkles,
+} from "lucide-react";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function ResultCard({ title, issues, score }: any) {
   return (
-  
     <div className="bg-[#0A0E14] rounded-md p-4 mb-3 flex flex-row items-center gap-4">
-        <div className="bg-[#0e121a] rounded-full w-10 h-10 justify-center flex items-center">
+      <div className="bg-[#0e121a] rounded-full w-10 h-10 justify-center flex items-center">
         <AlertCircle className="size-6 text-gray-500" />
-        </div>
-        <div>
-         <h3 className="text-xl font-normal">{title}</h3>
-         <p className="text-gray-500 text-md font-medium">Score: {score}</p>
-             {issues
-              .filter((issue: any, index: number, arr: any[]) =>
-                arr.findIndex((i: any) => i.title === issue.title) === index
-              )
-              .map((issue: any) => (
-            <strong className="text-gray-500 text-md font-medium" key={issue.id}>{issue.title}</strong>
-            ))}
-            </div>
+      </div>
+      <div>
+        <h3 className="text-xl font-normal">{title}</h3>
+        <p className="text-gray-500 text-md font-medium">Score: {score}</p>
+        {issues
+          .filter(
+            (issue: any, index: number, arr: any[]) =>
+              arr.findIndex((i: any) => i.title === issue.title) === index,
+          )
+          .map((issue: any) => (
+            <strong
+              className="text-gray-500 text-md font-medium"
+              key={issue.id}
+            >
+              {issue.title}
+            </strong>
+          ))}
+      </div>
 
-       
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <button className="ml-auto text-sm text-white hover:underline">
+            <ChevronRight />
+          </button>
+        </AlertDialogTrigger>
+        <AlertDialogContent className="bg-[#0A0E14] border border-white/5 rounded-md min-w-2xl max-w-2xl max-h-[50vh] overflow-y-auto">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-lg">
+              {title} — Análise detalhada
+            </AlertDialogTitle>
+            <AlertDialogDescription asChild>
+              <div className="flex flex-col gap-5 mt-2">
+                {issues.map((issue: any) => (
+                  <div
+                    key={issue.id}
+                    className="rounded-lg border border-white/5 bg-[#0e121a] p-4 flex flex-col gap-3"
+                  >
+                    {/* Header da issue */}
+                    <div className="flex items-center justify-between gap-2">
+                      <h4 className="text-sm font-semibold text-white">
+                        {issue.title}
+                      </h4>
+                      <span
+                        className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                          issue.severity === "high"
+                            ? "bg-red-500/20 text-red-400"
+                            : issue.severity === "medium"
+                              ? "bg-yellow-500/20 text-yellow-400"
+                              : "bg-blue-500/20 text-blue-400"
+                        }`}
+                      >
+                        {issue.severity}
+                      </span>
+                    </div>
 
+                    {issue.line && (
+                      <p className="text-xs text-gray-600">
+                        Linha {issue.line}
+                      </p>
+                    )}
 
-<AlertDialog>
-  <AlertDialogTrigger asChild>
-         <button className="ml-auto text-sm text-white hover:underline">
-                <ChevronRight/>
-            </button>
-  </AlertDialogTrigger>
-  <AlertDialogContent>
-    <AlertDialogHeader>
-      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-      <AlertDialogDescription>
-        This action cannot be undone. This will permanently delete your account
-        from our servers.
-      </AlertDialogDescription>
-    </AlertDialogHeader>
-    <AlertDialogFooter>
-      <AlertDialogCancel>Cancel</AlertDialogCancel>
-      <AlertDialogAction>Continue</AlertDialogAction>
-    </AlertDialogFooter>
-  </AlertDialogContent>
-</AlertDialog>
+                    {/* Descrição */}
+                    <p className="text-sm text-gray-400">{issue.description}</p>
+
+                    {/* Explicação do impacto */}
+                    {issue.explanation && (
+                      <div className="flex gap-2 items-start rounded-md bg-red-500/5 border border-red-500/10 p-3">
+                        <ShieldAlert className="size-4 text-red-400 mt-0.5 shrink-0" />
+                        <div>
+                          <p className="text-xs font-semibold text-red-400 mb-1">
+                            Por que isso é um problema?
+                          </p>
+                          <p className="text-sm text-gray-400">
+                            {issue.explanation}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Sugestão */}
+                    {issue.suggestion && (
+                      <div className="flex gap-2 items-start rounded-md bg-yellow-500/5 border border-yellow-500/10 p-3">
+                        <Lightbulb className="size-4 text-yellow-400 mt-0.5 shrink-0" />
+                        <div>
+                          <p className="text-xs font-semibold text-yellow-400 mb-1">
+                            Como corrigir?
+                          </p>
+                          <p className="text-sm text-gray-400">
+                            {issue.suggestion}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Benefício */}
+                    {issue.benefit && (
+                      <div className="flex gap-2 items-start rounded-md bg-emerald-500/5 border border-emerald-500/10 p-3">
+                        <Sparkles className="size-4 text-emerald-400 mt-0.5 shrink-0" />
+                        <div>
+                          <p className="text-xs font-semibold text-emerald-400 mb-1">
+                            Após a correção
+                          </p>
+                          <p className="text-sm text-gray-400">
+                            {issue.benefit}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="justify-end bg-[#0e121a]">
+            <AlertDialogCancel className="rounded-sm">Fechar</AlertDialogCancel>
+            <AlertDialogAction className="rounded-sm">
+              Entendi
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
 
-{/* 
+{
+  /* 
       <h3 className="text-lg font-medium">{title}</h3>
       <p>Score: {score}</p>
 
@@ -61,4 +162,5 @@ export function ResultCard({ title, issues, score }: any) {
           <strong>{issue.title}</strong>
           <p>{issue.description}</p>
         </div>
-      ))} */}
+      ))} */
+}

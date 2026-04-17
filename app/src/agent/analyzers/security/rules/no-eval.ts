@@ -15,7 +15,9 @@ export function noEvalRule(ast: any): Issue[] {
           severity: 'high',
           category: 'security',
           line: path.node.loc?.start.line,
-          suggestion: 'Evite eval. Use alternativas seguras.',
+          suggestion: 'Substitua eval() por JSON.parse(), Function constructor controlado, ou lógica específica para o caso de uso.',
+          explanation: 'eval() executa qualquer string como código JavaScript. Se essa string for manipulada por um usuário mal-intencionado, ele pode executar código arbitrário no navegador, roubar dados ou comprometer a sessão.',
+          benefit: 'Eliminar eval remove um dos vetores de ataque mais perigosos, tornando o código imune a injeção de código via input.',
         });
       }
     },

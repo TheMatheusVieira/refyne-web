@@ -16,7 +16,9 @@ export function dangerousHtmlRule(ast: any): Issue[] {
           severity: 'high',
           category: 'security',
           line: path.node.loc?.start.line,
-          suggestion: 'Sanitize o conteúdo antes de usar.',
+          suggestion: 'Use uma biblioteca de sanitização como DOMPurify antes de injetar HTML: DOMPurify.sanitize(html).',
+          explanation: 'dangerouslySetInnerHTML injeta HTML diretamente no DOM sem sanitização. Se o conteúdo vier de input do usuário ou API externa, um atacante pode injetar scripts maliciosos (XSS).',
+          benefit: 'Sanitizar o HTML previne ataques XSS, protegendo dados dos usuários e a integridade da aplicação.',
         });
       }
     },

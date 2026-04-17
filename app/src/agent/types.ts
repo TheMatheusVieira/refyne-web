@@ -21,6 +21,12 @@ export interface Issue {
 
   suggestion?: string;
 
+  // 🔥 Explicação do impacto (por que isso é ruim?)
+  explanation?: string;
+
+  // 🔥 Benefício após aplicar a correção
+  benefit?: string;
+
   // 🔥 futuro: auto-fix
   fix?: {
     description: string;
