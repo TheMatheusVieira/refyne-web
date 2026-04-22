@@ -53,8 +53,9 @@ export default function Home() {
               <EmptyInfos />
             )}
             </div>
-            <Button className="w-full mt-10 h-12 text-xl font-bold rounded-sm bg-[#9ECAFF] border-[#9ECAFF] text-[#003258]"
-            onClick={() => analyze(code)}>
+            <Button className="w-full mt-10 h-12 text-xl font-bold rounded-sm bg-[#9ECAFF] border-[#9ECAFF] text-[#003258] disabled:opacity-40 disabled:cursor-not-allowed"
+            onClick={() => analyze(code)}
+            disabled={!code.trim() || loading}>
               <Zap className="size-5 mr-2" />
               {loading ? 'Analyzing...' : 'RUN DEEP ANALYSIS'}
             </Button>

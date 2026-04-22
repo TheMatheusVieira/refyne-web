@@ -18,21 +18,20 @@ import {
 } from "lucide-react";
 
 const navItems = [
-  { label: "Editor", icon: CodeXmlIcon },
-  { label: "Results", icon: ListChecksIcon },
-  { label: "History", icon: HistoryIcon },
-  { label: "Rules", icon: SlidersHorizontalIcon },
-  
+  { label: "Editor", icon: CodeXmlIcon, route: '/' },
+  { label: "Results", icon: ListChecksIcon, route: '/results' },
+  { label: "History", icon: HistoryIcon, route: '/history' },
+  { label: "Rules", icon: SlidersHorizontalIcon, route: '/rules' },
 ];
 
 const navItems2 = [
- { label: "Documentation", icon: BookOpenIcon },
- { label: "Logout", icon: LogOut },
+ { label: "Documentation", icon: BookOpenIcon, route: '/documentation' },
+ { label: "Logout", icon: LogOut, route: '/logout' },
 ]
 
 export function AppSidebar() {
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar collapsible="none">
       <SidebarContent className="bg-[#181C22]">
         <SidebarGroup>
           <SidebarGroupContent>
@@ -52,7 +51,7 @@ export function AppSidebar() {
               {navItems.map((item) => (
                 <SidebarMenuItem className="text-[#94A3B8]" key={item.label}>
                   <SidebarMenuButton asChild className="text-[16px] font-medium hover:bg-[#1C2026] rounded-none hover:h-10 hover:text-[#9ECAFF] hover:border-l-4 hover:border-l-[#00E475] [&:hover_svg]:text-[#9ECAFF]">
-                    <button>
+                    <button onClick={() => (window.location.href = item.route)}>
                       <item.icon className="size-4 text-[#94A3B8]" />
                       <span>{item.label}</span>
                     </button>
@@ -70,7 +69,7 @@ export function AppSidebar() {
           {navItems2.map((item) => (
             <SidebarMenuItem className="text-[#94A3B8]" key={item.label}>
               <SidebarMenuButton asChild className="text-[16px] font-medium hover:bg-[#1C2026] rounded-none hover:h-10 hover:text-[#9ECAFF] hover:border-l-4 hover:border-l-[#00E475] [&:hover_svg]:text-[#9ECAFF]">
-                <button>
+                <button onClick={() => (window.location.href = item.route)}>
                   <item.icon className="size-4 text-[#94A3B8]" />
                   <span>{item.label}</span>
                 </button>

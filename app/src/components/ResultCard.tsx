@@ -18,30 +18,39 @@ import {
 } from "lucide-react";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+function getScoreColor(score: number) {
+  if (score >= 80) return { text: "text-emerald-400", bg: "bg-emerald-400/10", fill: "text-emerald-400" };
+  if (score >= 50) return { text: "text-yellow-400", bg: "bg-yellow-400/10", fill: "text-yellow-400" };
+  return { text: "text-red-400", bg: "bg-red-400/10", fill: "text-red-400" };
+}
+
 export function ResultCard({ title, issues, score }: any) {
+  const hasIssues = issues && issues.length > 0;
+  const colors = getScoreColor(score);
+
   return (
     <div className="bg-[#0A0E14] rounded-md p-4 mb-3 flex flex-row items-center gap-4">
-      <div className="bg-[#0e121a] rounded-full w-10 h-10 justify-center flex items-center">
-        <AlertCircle className="size-6 text-gray-500" />
+      <div className={`rounded-full w-10 h-10 justify-center flex items-center ${colors.bg}`}>
+        <AlertCircle className={`size-6 ${colors.fill}`} />
       </div>
       <div>
         <h3 className="text-xl font-normal">{title}</h3>
-        <p className="text-gray-500 text-md font-medium">Score: {score}</p>
-        {issues
-          .filter(
-            (issue: any, index: number, arr: any[]) =>
-              arr.findIndex((i: any) => i.title === issue.title) === index,
-          )
-          .map((issue: any) => (
-            <strong
-              className="text-gray-500 text-md font-medium"
-              key={issue.id}
-            >
-              {issue.title}
-            </strong>
-          ))}
+        <p className={`text-md font-medium ${colors.text}`}>Score: {score}</p>
+        {hasIssues && (
+          <p className={`text-sm font-medium ${colors.text}`}>
+            {issues
+              .filter(
+                (issue: any, index: number, arr: any[]) =>
+                  arr.findIndex((i: any) => i.title === issue.title) === index,
+              )
+              .map((issue: any) => issue.title)
+              .join(", ")}
+          </p>
+        )}
       </div>
 
+      {hasIssues ? (
       <AlertDialog>
         <AlertDialogTrigger asChild>
           <button className="ml-auto text-sm text-white hover:underline">
@@ -144,6 +153,11 @@ export function ResultCard({ title, issues, score }: any) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      ) : (
+        <div className="ml-auto">
+          <ChevronRight className="text-gray-700" />
+        </div>
+      )}
     </div>
   );
 }
