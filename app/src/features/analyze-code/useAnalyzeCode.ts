@@ -12,8 +12,10 @@ export function useAnalyzeCode() {
     try {
       const res = await runAgent(code);
       setResult(res);
+      return res;
     } catch (err) {
       console.error(err);
+      return null;
     } finally {
       setLoading(false);
     }

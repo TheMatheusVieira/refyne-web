@@ -19,7 +19,7 @@ import {
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-function getScoreColor(score: number) {
+export function getScoreColor(score: number) {
   if (score >= 80) return { text: "text-emerald-400", bg: "bg-emerald-400/10", fill: "text-emerald-400" };
   if (score >= 50) return { text: "text-yellow-400", bg: "bg-yellow-400/10", fill: "text-yellow-400" };
   return { text: "text-red-400", bg: "bg-red-400/10", fill: "text-red-400" };

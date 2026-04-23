@@ -9,6 +9,8 @@ import { CodeEditor } from "./components/code-editor";
 import { Button } from "@/components/ui/button";
 import { Zap } from "lucide-react";
 import { EmptyInfos } from "./components/empty-infos";
+import { ProjectModal } from "./components/project-modal";
+import { addProject, saveAnalysis } from "./src/features/history/services/storage";
 
 import { useAnalyzeCode } from "./src/features/analyze-code/useAnalyzeCode";
 import { ResultCard } from "./src/components/ResultCard";
@@ -16,7 +18,39 @@ import { ResultCard } from "./src/components/ResultCard";
 
 export default function Home() {
   const [code, setCode] = useState("");
+  const [projectName, setProjectName] = useState<string | null>(null);
   const { analyze, loading, result } = useAnalyzeCode();
+
+  function handleSelectProject(name: string) {
+    addProject(name);
+    setProjectName(name);
+  }
+
+  async function handleAnalyze() {
+    if (!projectName || !code.trim()) return;
+    const res = await analyze(code);
+    if (res) {
+      const totalIssues =
+        (res.performance?.issues?.length ?? 0) +
+        (res.security?.issues?.length ?? 0) +
+        (res.cleanCode?.issues?.length ?? 0);
+
+      const overallScore = Math.round(
+          ((res.performance?.score ?? 0) +
+            (res.security?.score ?? 0) +
+            (res.cleanCode?.score ?? 0)) / 3
+        );
+
+      saveAnalysis({
+        id: crypto.randomUUID(),
+        date: new Date().toISOString(),
+        project: projectName,
+        efficiencyScore: overallScore,
+        issuesDetected: totalIssues,
+        result: res,
+      });
+    }
+  }
 
   return (
     <div className="flex h-screen flex-col overflow-hidden">
@@ -24,7 +58,8 @@ export default function Home() {
       <SidebarProvider className="flex-1 min-h-0">
         <AppSidebar />
         <main className="flex flex-1 overflow-hidden bg-[#181C22] p-6 gap-6">
-          <div className="flex-1 min-w-0 min-h-0">
+          <div className="relative flex-1 min-w-0 min-h-0">
+            <ProjectModal open={!projectName} onConfirm={handleSelectProject} />
             <CodeEditor value={code} onChange={setCode} />
           </div>
 
@@ -54,7 +89,7 @@ export default function Home() {
             )}
             </div>
             <Button className="w-full mt-10 h-12 text-xl font-bold rounded-sm bg-[#9ECAFF] border-[#9ECAFF] text-[#003258] disabled:opacity-40 disabled:cursor-not-allowed"
-            onClick={() => analyze(code)}
+            onClick={() => handleAnalyze()}
             disabled={!code.trim() || loading}>
               <Zap className="size-5 mr-2" />
               {loading ? 'Analyzing...' : 'RUN DEEP ANALYSIS'}
