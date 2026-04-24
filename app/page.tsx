@@ -1,15 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "./components/app-sidebar";
-import { Header } from "./components/header";
-import { ChartRadialText } from "./components/radial-chart";
-import { CodeEditor } from "./components/code-editor";
-import { Button } from "@/components/ui/button";
+import { SidebarProvider } from "@/app/src/components/ui/sidebar";
+import { AppSidebar } from "./src/components/app-sidebar";
+import { Header } from "./src/components/header";
+import { ChartRadialText } from "./src/components/radial-chart";
+import { CodeEditor } from "./src/components/code-editor";
+import { Button } from "@/app/src/components/ui/button";
 import { Zap } from "lucide-react";
-import { EmptyInfos } from "./components/empty-infos";
-import { ProjectModal } from "./components/project-modal";
+import { EmptyInfos } from "./src/components/empty-infos";
+import { ProjectModal } from "./src/components/project-modal";
 import { addProject, saveAnalysis } from "./src/features/history/services/storage";
 
 import { useAnalyzeCode } from "./src/features/analyze-code/useAnalyzeCode";

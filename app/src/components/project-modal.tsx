@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "@/app/src/components/ui/button";
+import { Input } from "@/app/src/components/ui/input";
 import { FolderOpen, Plus, ArrowLeft } from "lucide-react";
 import {
   Select,
@@ -10,7 +10,7 @@ import {
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select";
+} from "@/app/src/components/ui/select";
 import { getProjects, addProject } from "@/app/src/features/history/services/storage";
 
 interface ProjectModalProps {
@@ -22,7 +22,7 @@ export function ProjectModal({ open, onConfirm }: ProjectModalProps) {
   const [view, setView] = useState<"select" | "create">("select");
   const [selected, setSelected] = useState("");
   const [newName, setNewName] = useState("");
-  const [projects, setProjects] = useState<string[]>(() => getProjects());
+  const [projects, setProjects] = useState<string[]>([]);
 
   useEffect(() => {
     if (open) {

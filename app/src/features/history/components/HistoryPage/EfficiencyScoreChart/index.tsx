@@ -9,13 +9,13 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/app/src/components/ui/card"
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
-} from "@/components/ui/chart"
+} from "@/app/src/components/ui/chart"
 import { getLast7DaysEfficiency, type DailyEfficiency } from "@/app/src/features/history/services/storage"
 
 const chartConfig = {

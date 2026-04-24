@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { getScoreColor } from "@/app/src/components/ResultCard";
-import { Button } from "@/components/ui/button"
-import { Progress } from "@/components/ui/progress";
+import { Button } from "@/app/src/components/ui/button"
+import { Progress } from "@/app/src/components/ui/progress";
 import {
   Table,
   TableBody,
@@ -11,7 +11,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/app/src/components/ui/table"
 import { getAnalyses, type AnalysisRun } from "@/app/src/features/history/services/storage";
 import { Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 

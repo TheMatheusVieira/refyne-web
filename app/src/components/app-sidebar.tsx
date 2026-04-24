@@ -7,7 +7,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar";
+} from "@/app/src/components/ui/sidebar";
 import {
   CodeXmlIcon,
   ListChecksIcon,
@@ -19,9 +19,10 @@ import {
 
 const navItems = [
   { label: "Editor", icon: CodeXmlIcon, route: '/' },
-  { label: "Results", icon: ListChecksIcon, route: '/results' },
   { label: "History", icon: HistoryIcon, route: '/history' },
-  { label: "Rules", icon: SlidersHorizontalIcon, route: '/rules' },
+  { label: "Rules", icon: SlidersHorizontalIcon, route: '/rules-settings' },
+  { label: "Results", icon: ListChecksIcon, route: '/results' },
+
 ];
 
 const navItems2 = [

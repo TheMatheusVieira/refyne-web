@@ -8,7 +8,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+} from "@/app/src/components/ui/alert-dialog";
 import {
   AlertCircle,
   ChevronRight,

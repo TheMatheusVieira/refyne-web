@@ -1,12 +1,12 @@
 "use client";
 
-import { AppSidebar } from "@/app/components/app-sidebar";
-import { Header } from "@/app/components/header";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/app/src/components/app-sidebar";
+import { Header } from "@/app/src/components/header";
+import { SidebarProvider } from "@/app/src/components/ui/sidebar";
 import { ChartAreaGradient } from "./EfficiencyScoreChart";
 import { TableDemo } from "./AnalysisRunsTable";
 import { AverageScore } from "./AverageScore";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/app/src/components/ui/button";
 import { History } from "lucide-react";
 
 export default function HistoryPage() {
@@ -55,7 +55,7 @@ export default function HistoryPage() {
                     View full archive
                   </span>
                   <span className="text-sm text-[#8B90A0]">
-                    Showing last 20 analyses
+                    Showing last 6 analyses
                   </span>
                 </div>
               </div>

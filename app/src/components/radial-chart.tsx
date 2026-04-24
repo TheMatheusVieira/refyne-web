@@ -15,11 +15,11 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/app/src/components/ui/card"
 import {
   ChartContainer,
   type ChartConfig,
-} from "@/components/ui/chart"
+} from "@/app/src/components/ui/chart"
 
 const chartConfig = {
   score: {
