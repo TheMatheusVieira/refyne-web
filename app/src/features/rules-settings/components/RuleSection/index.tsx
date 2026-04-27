@@ -26,7 +26,7 @@ export function RuleSection({
   const activeCount = rules.filter((r) => settings[r.id]?.enabled).length;
 
   return (
-    <section className="flex-1 min-h-0 flex flex-col mb-4">
+    <section className="flex-1 min-h-0 flex flex-col mb-8">
       <div className="flex flex-row gap-2 items-center mb-4 border-b border-[#282C34] pb-2">
         <Icon className="text-[#9ECAFF]" />
         <h1 className="text-2xl font-medium">{title}</h1>
@@ -37,7 +37,7 @@ export function RuleSection({
         </div>
       </div>
 
-      <ScrollArea className="flex-1 min-h-0">
+      <ScrollArea className="flex-1 min-h-0 border border-[#282C34] rounded-md">
         {rules.map((rule) => (
           <RuleCard
             key={rule.id}

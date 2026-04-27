@@ -21,25 +21,28 @@ import {
   type ChartConfig,
 } from "@/app/src/components/ui/chart"
 
-const chartConfig = {
-  score: {
-    label: "Score",
-  },
-  value: {
-    label: "Value",
-    color: "#00E475",
-  },
-} satisfies ChartConfig
+function getScoreHex(score: number) {
+  if (score >= 80) return "#00E475";
+  if (score >= 50) return "#FACC15";
+  return "#F87171";
+}
 
-export function ChartRadialText({ score = 0, description, issue }: { score?: number; description?: string; issue?: { title: string } }) {
+export function ChartRadialText({ score = 0, description }: { score?: number; description?: string }) {
+  const color = getScoreHex(score);
+
+  const chartConfig = {
+    score: { label: "Score" },
+    value: { label: "Value", color },
+  } satisfies ChartConfig;
+
   const chartData = [
-    { name: "score", value: score, fill: "var(--color-value)", description: description, issue: issue },
+    { name: "score", value: score, fill: color },
   ]
   const endAngle = (score / 100) * 360
   return (
     <Card className="flex flex-col bg-[#1C2026] size-120">
       <CardHeader className="items-center pb-0 pt-5 text-center">
-        <CardTitle>PERFORMANCE SCORE</CardTitle>
+        <CardTitle>OVERALL SCORE</CardTitle>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -96,14 +99,9 @@ export function ChartRadialText({ score = 0, description, issue }: { score?: num
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 leading-none font-medium text-[#00E475]">
+        <div className="flex items-center gap-2 leading-none font-medium" style={{ color }}>
         {description} <TrendingUp className="h-4 w-4" />
         </div>
-        {issue?.title && (
-          <div className="leading-none text-muted-foreground">
-            {issue.title}
-          </div>
-        )}
       </CardFooter>
     </Card>
   )

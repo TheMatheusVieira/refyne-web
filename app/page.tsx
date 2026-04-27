@@ -11,6 +11,7 @@ import { Zap } from "lucide-react";
 import { EmptyInfos } from "./src/components/empty-infos";
 import { ProjectModal } from "./src/components/project-modal";
 import { addProject, saveAnalysis } from "./src/features/history/services/storage";
+import { saveResult } from "./src/features/results/services/storage";
 
 import { useAnalyzeCode } from "./src/features/analyze-code/useAnalyzeCode";
 import { ResultCard } from "./src/components/ResultCard";
@@ -28,7 +29,9 @@ export default function Home() {
 
   async function handleAnalyze() {
     if (!projectName || !code.trim()) return;
+    const start = performance.now();
     const res = await analyze(code);
+    const durationMs = Math.round(performance.now() - start);
     if (res) {
       const totalIssues =
         (res.performance?.issues?.length ?? 0) +
@@ -49,6 +52,14 @@ export default function Home() {
         issuesDetected: totalIssues,
         result: res,
       });
+
+      saveResult({
+        code,
+        project: projectName,
+        result: res,
+        date: new Date().toISOString(),
+        durationMs,
+      });
     }
   }
 
@@ -63,15 +74,22 @@ export default function Home() {
             <CodeEditor value={code} onChange={setCode} />
           </div>
 
-            <div className="shrink-0 w-40px overflow-auto">
+            <div className="shrink-0 w-120 overflow-auto">
             <ChartRadialText
-              score={result?.performance?.score ?? 0}
+              score={
+                result
+                  ? Math.round(
+                      ((result.performance?.score ?? 0) +
+                        (result.security?.score ?? 0) +
+                        (result.cleanCode?.score ?? 0)) / 3
+                    )
+                  : 0
+              }
               description={
-                result?.performance?.issues?.length
-                  ? `${result.performance.issues.length} issue(s) found`
+                result
+                  ? `${(result.performance?.issues?.length ?? 0) + (result.security?.issues?.length ?? 0) + (result.cleanCode?.issues?.length ?? 0)} issue(s) found`
                   : undefined
               }
-              issue={result?.performance?.issues?.[0]}
             />
             <div className="flex flex-col gap-4 mt-6">
             <h1 className="text-xl font-normal">

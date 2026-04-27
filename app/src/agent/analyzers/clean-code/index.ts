@@ -8,8 +8,8 @@ export function analyzeCleanCode(code: string) {
   const ast = parseCode(code);
 
   const issues: Issue[] = [
-    ...badNamingRule(ast),
-    ...largeFunctionRule(ast),
+    ...badNamingRule(ast, code),
+    ...largeFunctionRule(ast, code),
   ];
 
   return {

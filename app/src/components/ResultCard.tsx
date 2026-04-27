@@ -60,7 +60,7 @@ export function ResultCard({ title, issues, score }: any) {
         <AlertDialogContent className="bg-[#0A0E14] border border-white/5 rounded-md min-w-2xl max-w-2xl max-h-[50vh] overflow-y-auto">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-lg">
-              {title} — Análise detalhada
+              {title} — {issues.length} problema{issues.length !== 1 ? 's' : ''} encontrado{issues.length !== 1 ? 's' : ''}
             </AlertDialogTitle>
             <AlertDialogDescription asChild>
               <div className="flex flex-col gap-5 mt-2">

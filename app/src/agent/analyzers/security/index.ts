@@ -9,8 +9,8 @@ export function analyzeSecurity(code: string) {
   const ast = parseCode(code);
 
   const issues: Issue[] = [
-    ...noEvalRule(ast),
-    ...dangerousHtmlRule(ast),
+    ...noEvalRule(ast, code),
+    ...dangerousHtmlRule(ast, code),
   ];
 
   return {

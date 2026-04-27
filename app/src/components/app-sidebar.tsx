@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Sidebar,
   SidebarContent,
@@ -16,6 +18,9 @@ import {
   BookOpenIcon,
   LogOut,
 } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { getResult } from "@/app/src/features/results/services/storage";
+import { useState, useEffect } from "react";
 
 const navItems = [
   { label: "Editor", icon: CodeXmlIcon, route: '/' },
@@ -31,6 +36,14 @@ const navItems2 = [
 ]
 
 export function AppSidebar() {
+  const pathname = usePathname();
+  const [projectName, setProjectName] = useState<string | null>(null);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setProjectName(getResult()?.project ?? null);
+  }, []);
+
   return (
     <Sidebar collapsible="none">
       <SidebarContent className="bg-[#181C22]">
@@ -42,23 +55,35 @@ export function AppSidebar() {
               <div className="flex items-center gap-2">
                 <span className="size-2 rounded-full bg-green-500" />
                 <div className="flex flex-col leading-tight group-data-[collapsible=icon]:hidden">
-                  <span className="text-sm font-semibold text-gray-100">
-                    PROJECT ALPHA
+                  <span className="text-sm font-semibold text-gray-100 uppercase">
+                    {projectName ?? "NO PROJECT"}
                   </span>
-                  <span className="text-xs text-gray-500">ANALYSIS ACTIVE</span>
+                  <span className="text-xs text-gray-500">
+                    {projectName ? "ANALYSIS ACTIVE" : "SELECT A PROJECT"}
+                  </span>
                 </div>
               </div>
 
-              {navItems.map((item) => (
-                <SidebarMenuItem className="text-[#94A3B8]" key={item.label}>
-                  <SidebarMenuButton asChild className="text-[16px] font-medium hover:bg-[#1C2026] rounded-none hover:h-10 hover:text-[#9ECAFF] hover:border-l-4 hover:border-l-[#00E475] [&:hover_svg]:text-[#9ECAFF]">
-                    <button onClick={() => (window.location.href = item.route)}>
-                      <item.icon className="size-4 text-[#94A3B8]" />
-                      <span>{item.label}</span>
-                    </button>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {navItems.map((item) => {
+                const isActive = pathname === item.route;
+                return (
+                  <SidebarMenuItem className="text-[#94A3B8]" key={item.label}>
+                    <SidebarMenuButton
+                      asChild
+                      className={`text-[16px] font-medium rounded-none hover:bg-[#1C2026] hover:h-10 hover:text-[#9ECAFF] hover:border-l-4 hover:border-l-[#00E475] [&:hover_svg]:text-[#9ECAFF] ${
+                        isActive
+                          ? "bg-[#1C2026] h-10 text-[#9ECAFF] border-l-4 border-l-[#00E475] [&_svg]:text-[#9ECAFF]"
+                          : ""
+                      }`}
+                    >
+                      <button onClick={() => (window.location.href = item.route)}>
+                        <item.icon className={`size-4 ${isActive ? "text-[#9ECAFF]" : "text-[#94A3B8]"}`} />
+                        <span>{item.label}</span>
+                      </button>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
 
             </SidebarMenu>
 
