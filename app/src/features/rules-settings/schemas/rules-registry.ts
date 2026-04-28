@@ -34,6 +34,38 @@ export const rulesRegistry: RuleDefinition[] = [
     category: "performance",
     defaultSeverity: "medium",
   },
+  {
+    id: "nested-iteration",
+    name: "nested-iteration",
+    description:
+      "Detects nested loops (.map/.forEach/.filter inside another) causing O(n²) complexity.",
+    category: "performance",
+    defaultSeverity: "high",
+  },
+  {
+    id: "inline-object-props",
+    name: "inline-object-props",
+    description:
+      "Flags inline object/array literals in JSX props that create new references every render.",
+    category: "performance",
+    defaultSeverity: "medium",
+  },
+  {
+    id: "heavy-computation",
+    name: "heavy-computation",
+    description:
+      "Detects heavy computations (sort, reduce, filter chains) inside render without useMemo.",
+    category: "performance",
+    defaultSeverity: "high",
+  },
+  {
+    id: "conditional-remount",
+    name: "conditional-remount",
+    description:
+      "Flags ternary operators returning different JSX components, causing unnecessary unmount/remount cycles.",
+    category: "performance",
+    defaultSeverity: "medium",
+  },
 
   // Clean Code
   {
@@ -58,7 +90,7 @@ export const rulesRegistry: RuleDefinition[] = [
     id: "no-eval",
     name: "no-eval",
     description:
-      "Flags eval() calls that execute arbitrary strings as code, opening severe injection vulnerabilities.",
+      "Flags eval() and new Function() calls that execute arbitrary strings as code, opening severe injection vulnerabilities.",
     category: "security",
     defaultSeverity: "high",
   },
@@ -67,6 +99,62 @@ export const rulesRegistry: RuleDefinition[] = [
     name: "dangerous-html",
     description:
       "Detects dangerouslySetInnerHTML usage that can expose the application to XSS attacks.",
+    category: "security",
+    defaultSeverity: "high",
+  },
+  {
+    id: "hardcoded-secrets",
+    name: "hardcoded-secrets",
+    description:
+      "Detects hardcoded tokens, API keys, passwords, and secrets that should be in environment variables.",
+    category: "security",
+    defaultSeverity: "high",
+  },
+  {
+    id: "unsafe-url",
+    name: "unsafe-url",
+    description:
+      "Detects unsanitized user input in URLs, HTTP calls, and open redirect vulnerabilities.",
+    category: "security",
+    defaultSeverity: "high",
+  },
+  {
+    id: "unsafe-link",
+    name: "unsafe-link",
+    description:
+      "Flags <a target='_blank'> links without rel='noopener noreferrer', enabling tabnabbing attacks.",
+    category: "security",
+    defaultSeverity: "medium",
+  },
+  {
+    id: "unsafe-cookie",
+    name: "unsafe-cookie",
+    description:
+      "Detects client-side cookie manipulation via document.cookie that should be server-side with HttpOnly.",
+    category: "security",
+    defaultSeverity: "high",
+  },
+  {
+    id: "unsafe-json-parse",
+    name: "unsafe-json-parse",
+    description:
+      "Flags JSON.parse() calls without try-catch, which can crash on malformed external input.",
+    category: "security",
+    defaultSeverity: "medium",
+  },
+  {
+    id: "unsafe-localstorage",
+    name: "unsafe-localstorage",
+    description:
+      "Detects localStorage reads for auth/access control data that can be tampered with by users or stolen via XSS.",
+    category: "security",
+    defaultSeverity: "high",
+  },
+  {
+    id: "no-exhibitions",
+    name: "no-exhibitions",
+    description:
+      "Detects exposed sensitive data and tokens that should be moved to secure environment variables.",
     category: "security",
     defaultSeverity: "high",
   },

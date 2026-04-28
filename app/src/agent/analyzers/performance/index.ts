@@ -9,18 +9,26 @@ import { inlineObjectPropsRule } from './rules/inline-object-props';
 import { heavyComputationRule } from './rules/heavy-computation';
 import { conditionalRemountRule } from './rules/conditional-remount';
 
-export function analyzePerformance(code: string) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const RULE_MAP: Record<string, (ast: any, code: string) => Issue[]> = {
+  'no-index-key': noIndexKeyRule,
+  'no-inline-functions': noInlineFunctionsRule,
+  'missing-memo': missingMemoRule,
+  'nested-iteration': nestedIterationRule,
+  'inline-object-props': inlineObjectPropsRule,
+  'heavy-computation': heavyComputationRule,
+  'conditional-remount': conditionalRemountRule,
+};
+
+export function analyzePerformance(code: string, enabledRules?: Set<string>) {
   const ast = parseCode(code);
 
-  const issues: Issue[] = [
-    ...noIndexKeyRule(ast, code),
-    ...noInlineFunctionsRule(ast, code),
-    ...missingMemoRule(ast, code),
-    ...nestedIterationRule(ast, code),
-    ...inlineObjectPropsRule(ast, code),
-    ...heavyComputationRule(ast, code),
-    ...conditionalRemountRule(ast, code),
-  ];
+  const issues: Issue[] = [];
+  for (const [id, ruleFn] of Object.entries(RULE_MAP)) {
+    if (!enabledRules || enabledRules.has(id)) {
+      issues.push(...ruleFn(ast, code));
+    }
+  }
 
   return {
     issues,

@@ -1,7 +1,6 @@
 import traverse from '@babel/traverse';
 import { Issue } from '../../../types';
 
-// Rule 3/4: Inline objects, arrays and new expressions in JSX props
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function inlineObjectPropsRule(ast: any, code: string): Issue[] {
   const issues: Issue[] = [];
@@ -15,10 +14,7 @@ export function inlineObjectPropsRule(ast: any, code: string): Issue[] {
 
       const expr = value.expression;
       const propName = path.node.name?.name ?? 'prop';
-
-      // Skip style prop (very common pattern, usually acceptable)
       if (propName === 'style') return;
-      // Skip key prop
       if (propName === 'key') return;
 
       let issueType: string | null = null;

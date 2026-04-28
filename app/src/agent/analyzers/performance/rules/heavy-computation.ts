@@ -9,7 +9,6 @@ const HEAVY_FUNCTIONS = [
 
 const HEAVY_CONSTRUCTORS = ['RegExp', 'Date', 'Intl.DateTimeFormat', 'Intl.NumberFormat'];
 
-// Rule 1/11/15: Heavy synchronous work in render path
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function heavyComputationRule(ast: any, code: string): Issue[] {
   const issues: Issue[] = [];
@@ -17,16 +16,13 @@ export function heavyComputationRule(ast: any, code: string): Issue[] {
 
   traverse(ast, {
     CallExpression(path) {
-      // Skip if already inside useMemo/useCallback
       if (isInsideMemo(path)) return;
-      // Only flag if inside a component (heuristic: inside a function that contains JSX)
       if (!isInsideComponentRender(path)) return;
 
       const callee = path.node.callee;
       let matchedPattern: string | null = null;
       let fixCode = '';
 
-      // Check JSON.parse, JSON.stringify, etc.
       if (
         callee.type === 'MemberExpression' &&
         callee.object.type === 'Identifier' &&
@@ -40,7 +36,6 @@ export function heavyComputationRule(ast: any, code: string): Issue[] {
         }
       }
 
-      // Check new RegExp, new Date, etc. in render
       if (
         callee.type === 'Identifier' &&
         HEAVY_CONSTRUCTORS.includes(callee.name)
@@ -123,7 +118,6 @@ function isInsideMemo(path: any): boolean {
 function isInsideComponentRender(path: any): boolean {
   let current = path.parentPath;
   while (current) {
-    // If inside useEffect/useCallback/useMemo callback, not in render path
     if (
       current.node?.type === 'CallExpression' &&
       current.node.callee?.type === 'Identifier' &&

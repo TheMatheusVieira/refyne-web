@@ -6,7 +6,8 @@ import { Header } from "@/app/src/components/header";
 import { Card } from "@/app/src/components/ui/card";
 import { Progress } from "@/app/src/components/ui/progress";
 import { SidebarProvider } from "@/app/src/components/ui/sidebar";
-import { BrushCleaning, Gauge, ShieldCheck } from "lucide-react";
+import { BrushCleaning, Gauge, ShieldCheck, Sparkles, Plus } from "lucide-react";
+import { Button } from "@/app/src/components/ui/button";
 import { Severity } from "@/app/src/agent/types";
 import { getRulesByCategory } from "../../schemas/rules-registry";
 import {
@@ -14,8 +15,15 @@ import {
   saveRulesSettings,
   RulesSettings,
 } from "../../services/storage";
+import {
+  loadCustomRules,
+  saveCustomRules,
+  removeCustomRule,
+  CustomRule,
+} from "../../services/custom-rules-storage";
 import { rulesRegistry } from "../../schemas/rules-registry";
 import { RuleSection } from "../RuleSection";
+import { AddRuleModal } from "../AddRuleModal";
 
 const performanceRules = getRulesByCategory("performance");
 const cleanCodeRules = getRulesByCategory("clean-code");
@@ -25,6 +33,11 @@ export default function RulesSettingsPage() {
   const [settings, setSettings] = useState<RulesSettings>(() =>
     loadRulesSettings()
   );
+  const [customRules, setCustomRules] = useState<CustomRule[]>(() => {
+    if (typeof window === "undefined") return [];
+    return loadCustomRules();
+  });
+  const [addModalOpen, setAddModalOpen] = useState(false);
 
   function handleToggle(ruleId: string, enabled: boolean) {
     setSettings((prev) => {
@@ -42,8 +55,30 @@ export default function RulesSettingsPage() {
     });
   }
 
-  const totalRules = rulesRegistry.length;
-  const activeRules = Object.values(settings).filter((s) => s.enabled).length;
+  function handleCustomToggle(id: string, enabled: boolean) {
+    setCustomRules((prev) => {
+      const next = prev.map((r) => (r.id === id ? { ...r, enabled } : r));
+      saveCustomRules(next);
+      return next;
+    });
+  }
+
+  function handleCustomRemove(id: string) {
+    removeCustomRule(id);
+    setCustomRules((prev) => prev.filter((r) => r.id !== id));
+  }
+
+  function handleRuleCreated(rule: CustomRule) {
+    setCustomRules((prev) => [...prev, rule]);
+  }
+
+  const customByCategory = (cat: string) =>
+    customRules.filter((r) => r.category === cat);
+
+  const totalRules = rulesRegistry.length + customRules.length;
+  const activeBuiltIn = Object.values(settings).filter((s) => s.enabled).length;
+  const activeCustom = customRules.filter((r) => r.enabled).length;
+  const activeRules = activeBuiltIn + activeCustom;
   const activePercent = totalRules > 0 ? Math.round((activeRules / totalRules) * 100) : 0;
 
   return (
@@ -68,6 +103,9 @@ export default function RulesSettingsPage() {
               settings={settings}
               onToggle={handleToggle}
               onSeverityChange={handleSeverityChange}
+              customRules={customByCategory("performance")}
+              onCustomToggle={handleCustomToggle}
+              onCustomRemove={handleCustomRemove}
             />
 
             <RuleSection
@@ -78,6 +116,9 @@ export default function RulesSettingsPage() {
               settings={settings}
               onToggle={handleToggle}
               onSeverityChange={handleSeverityChange}
+              customRules={customByCategory("clean-code")}
+              onCustomToggle={handleCustomToggle}
+              onCustomRemove={handleCustomRemove}
             />
 
             <RuleSection
@@ -88,6 +129,9 @@ export default function RulesSettingsPage() {
               settings={settings}
               onToggle={handleToggle}
               onSeverityChange={handleSeverityChange}
+              customRules={customByCategory("security")}
+              onCustomToggle={handleCustomToggle}
+              onCustomRemove={handleCustomRemove}
             />
 
           </div>
@@ -102,11 +146,31 @@ export default function RulesSettingsPage() {
                 <span className="text-2xl font-medium">{activeRules}</span>
                 </div>
                 <Progress value={activePercent} className="w-full" />
+                {customRules.length > 0 && (
+                  <div className="flex items-center gap-1.5 mt-1">
+                    <Sparkles className="h-3 w-3 text-[#00E475]" />
+                    <span className="text-xs text-[#4A4F5C]">
+                      {customRules.length} custom rule{customRules.length !== 1 ? "s" : ""}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
           </Card>
+          <Button
+            className="mt-4 w-80 h-10 bg-[#00E475] text-[#0A0E14] font-bold hover:bg-[#00E475]/90"
+            onClick={() => setAddModalOpen(true)}
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Add Custom Rule
+          </Button>
         </div>
       </SidebarProvider>
+      <AddRuleModal
+        open={addModalOpen}
+        onClose={() => setAddModalOpen(false)}
+        onRuleCreated={handleRuleCreated}
+      />
     </div>
   );
 }

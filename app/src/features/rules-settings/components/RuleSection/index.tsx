@@ -2,7 +2,9 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Category, Severity } from "@/app/src/agent/types";
 import { RuleDefinition } from "../../schemas/rules-registry";
 import { RuleSetting } from "../../services/storage";
+import { CustomRule } from "../../services/custom-rules-storage";
 import { RuleCard } from "../RuleCard";
+import { CustomRuleCard } from "../CustomRuleCard";
 import { LucideIcon } from "lucide-react";
 
 interface RuleSectionProps {
@@ -13,6 +15,9 @@ interface RuleSectionProps {
   settings: Record<string, RuleSetting>;
   onToggle: (ruleId: string, enabled: boolean) => void;
   onSeverityChange: (ruleId: string, severity: Severity) => void;
+  customRules?: CustomRule[];
+  onCustomToggle?: (id: string, enabled: boolean) => void;
+  onCustomRemove?: (id: string) => void;
 }
 
 export function RuleSection({
@@ -22,8 +27,13 @@ export function RuleSection({
   settings,
   onToggle,
   onSeverityChange,
+  customRules = [],
+  onCustomToggle,
+  onCustomRemove,
 }: RuleSectionProps) {
-  const activeCount = rules.filter((r) => settings[r.id]?.enabled).length;
+  const activeBuiltIn = rules.filter((r) => settings[r.id]?.enabled).length;
+  const activeCustom = customRules.filter((r) => r.enabled).length;
+  const activeCount = activeBuiltIn + activeCustom;
 
   return (
     <section className="flex-1 min-h-0 flex flex-col mb-8">
@@ -46,6 +56,14 @@ export function RuleSection({
             severity={settings[rule.id]?.severity ?? rule.defaultSeverity}
             onToggle={onToggle}
             onSeverityChange={onSeverityChange}
+          />
+        ))}
+        {customRules.map((rule) => (
+          <CustomRuleCard
+            key={rule.id}
+            rule={rule}
+            onToggle={onCustomToggle!}
+            onRemove={onCustomRemove!}
           />
         ))}
       </ScrollArea>

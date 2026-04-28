@@ -16,8 +16,6 @@ export function missingMemoRule(ast: any, code: string): Issue[] {
         current.isArrowFunctionExpression()
       ) {
         const body = current.node.body;
-
-        // Heurística: presença de JSX indica componente React
         if (body && JSON.stringify(body).includes('JSXElement')) {
           return true;
         }
@@ -110,7 +108,6 @@ export function missingMemoRule(ast: any, code: string): Issue[] {
         const memoized = isAlreadyMemoized(path);
         const complexity = estimateComplexity(mapCallback);
 
-        // 🎯 Score heurístico
         let score = 0;
 
         if (insideReact) score += 20;

@@ -17,7 +17,6 @@ export function nestedIterationRule(ast: any, code: string): Issue[] {
         callee.property.name !== 'map'
       ) return;
 
-      // Walk the callback body looking for nested iteration calls
       const callback = path.node.arguments[0];
       if (!callback) return;
 

@@ -1,7 +1,6 @@
 import traverse from '@babel/traverse';
 import { Issue } from '../../../types';
 
-// Rule 9: Conditional rendering that mounts/unmounts heavy components
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function conditionalRemountRule(ast: any, code: string): Issue[] {
   const issues: Issue[] = [];
@@ -11,8 +10,6 @@ export function conditionalRemountRule(ast: any, code: string): Issue[] {
     ConditionalExpression(path) {
       const { consequent, alternate } = path.node;
 
-      // Detect: condition ? <Component /> : <OtherComponent />
-      // Both branches render different components = expensive remount
       if (
         consequent.type === 'JSXElement' &&
         alternate &&
@@ -43,13 +40,11 @@ export function conditionalRemountRule(ast: any, code: string): Issue[] {
     },
 
     LogicalExpression(path) {
-      // Detect: condition && <HeavyComponent /> (mount/unmount pattern)
       if (
         path.node.operator === '&&' &&
         path.node.right.type === 'JSXElement'
       ) {
         const compName = getComponentName(path.node.right);
-        // Only flag uppercase (custom components), not HTML elements
         if (!compName || compName[0] !== compName[0].toUpperCase()) return;
 
         const line = path.node.loc?.start.line;

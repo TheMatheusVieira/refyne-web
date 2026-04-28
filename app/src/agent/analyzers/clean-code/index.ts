@@ -1,16 +1,23 @@
-import {parseCode } from '../../utils/ast';
+import { parseCode } from '../../utils/ast';
 import { Issue } from '../../types';
 import { badNamingRule } from './rules/bad-naming';
 import { largeFunctionRule } from './rules/large-function';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const RULE_MAP: Record<string, (ast: any, code: string) => Issue[]> = {
+  'bad-naming': badNamingRule,
+  'large-function': largeFunctionRule,
+};
 
-export function analyzeCleanCode(code: string) {
+export function analyzeCleanCode(code: string, enabledRules?: Set<string>) {
   const ast = parseCode(code);
 
-  const issues: Issue[] = [
-    ...badNamingRule(ast, code),
-    ...largeFunctionRule(ast, code),
-  ];
+  const issues: Issue[] = [];
+  for (const [id, ruleFn] of Object.entries(RULE_MAP)) {
+    if (!enabledRules || enabledRules.has(id)) {
+      issues.push(...ruleFn(ast, code));
+    }
+  }
 
   return {
     issues,
